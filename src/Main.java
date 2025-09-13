@@ -1,9 +1,13 @@
+
+import java.util.Scanner;
+
 public class Main {
 
+    public static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
 	// write your code here
         System.out.println("Lab 1 Java");
-        task1();
+        task2();
     }
 
     public static void print(String str) {
@@ -31,5 +35,42 @@ public class Main {
         print("Параметри double, результат int: " + c3(1, 2));
     }
 
+    public static void task2() {
+        print("\n\nTask 2\n\n");
+        print("Введіть половину розміру масиву: ");
+        int n = sc.nextInt();
+        if(n > 200) {
+            print("Розмір масиву не може бути більше 200");
+            return;
+        }
+        
 
+        double[] A = new double[2*n];
+
+        for (int i = 0; i < 2*n; i++) {
+            A[i] = Math.random();
+        }
+
+        for (int i = 0; i < 2*n; i++) {
+            print("A[" + i + "] = " + A[i]);
+        }
+        print("\n\n");
+
+        double average = 0;
+        for (int i = 0; i < n; i++) {
+            average += A[i];
+        }
+        average = average / n;
+
+        double sum = 0;
+
+        for (int i = n+1; i < 2*n; i++) {
+            if(A[i] < average)
+            {
+                sum += A[i];
+            }
+        }
+
+        print("Сума елементів, які більші за середнє арифметичне перших " + n + " елементів: " + sum);
+    }
 }
