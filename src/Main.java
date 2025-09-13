@@ -1,4 +1,5 @@
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -7,7 +8,24 @@ public class Main {
     public static void main(String[] args) {
 	// write your code here
         System.out.println("Lab 1 Java");
-        task3();
+        print("Виберіть завдання: ");
+        int n = sc.nextInt();
+        switch (n) {
+            case 1:
+                task1();
+                break;
+            case 2:
+                task2();
+                break;
+            case 3:
+                task3();
+                break;
+            case 4:
+                task4();
+                break;
+            default:
+                break;
+        }
     }
 
     public static void print(String str) {
@@ -110,6 +128,27 @@ public class Main {
                 print(B[i]+"\n]");
             }
         }
+
+    }
+
+    public static void task4() {
+        print("\n\nTask 4\n\n");
+
+        print("Введіть якийсь текст(повинні бути пробіли та розділові знаки): ");
+        String text = sc.nextLine();
+
+        String[] textToArray = text.split("\\W+");
+
+        char first = textToArray[0].charAt(0);
+
+        for (int i = 0; i < textToArray.length; i++) {
+            textToArray[i] = textToArray[i].replace(first, ' ');
+            textToArray[i] = textToArray[i].replace(" ", "");
+        }
+
+        text = Arrays.toString(textToArray);
+        text = text.replace("[", "").replace("]", "").replace(",", "");
+        print("Відредагований текст де з усіх слів вилучено всі наступні входження першої літери тексту: \n" + text);
 
     }
 }
