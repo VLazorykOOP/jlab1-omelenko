@@ -1,5 +1,6 @@
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Scanner;
 
 public class Main {
@@ -28,127 +29,145 @@ public class Main {
         }
     }
 
-    public static void print(String str) {
-        System.out.println(str);
-    }
+    public static void print(String str) {System.out.print(str);}
 
-    public static double c1(double a, double b) {
+    public static float c1(float a, float b) {
         return (((a*b)-((a+b)*(a-b)))/((b*b*b*b)+(a*a*a)))+(5*b);
     }
 
-    public static double c2(int a, int b) {
-        return ((double) ((a * b) - ((a + b) * (a - b))) /((b*b*b*b)+(a*a*a)))+(5*b);
+    public static float c2(int a, int b) {
+        return ((float) ((a * b) - ((a + b) * (a - b))) /((b*b*b*b)+(a*a*a)))+(5*b);
     }
 
-    public static int c3(double a, double b) {
+    public static int c3(float a, float b) {
         return (int) ((((a*b)-((a+b)*(a-b)))/((b*b*b*b)+(a*a*a)))+(5*b));
+    }
+
+    public static int[] removeDuplicates(int[] arr) {
+        LinkedHashSet<Integer> uniqueElements = new LinkedHashSet<>();
+        for (int element : arr) {
+            uniqueElements.add(element);
+        }
+        int[] result = new int[uniqueElements.size()];
+        int index = 0;
+        for (int element : uniqueElements) {
+            result[index++] = element;
+        }
+        return result;
     }
 
     public static void task1() {
         print("\n\nTask 1\n\n");
         print("Умова: ab-(a+b)(a-b) / (b^4+a^3) + 5b\n");
         print("Результати:\n");
-        print("Параметри double, результат double: " + c1(1, 2));
-        print("Параметри int, результат double: " + c2(1, 2));
-        print("Параметри double, результат int: " + c3(1, 2));
+        print("Параметри float, результат float: " + c1(1, 2) + "\n");
+        print("Параметри int, результат float: " + c2(1, 2) + "\n");
+        print("Параметри float, результат int: " + c3(1, 2) + "\n");
     }
 
     public static void task2() {
         print("\n\nTask 2\n\n");
-        print("Введіть половину розміру масиву: ");
+        print("Введіть розмір масиву: ");
         int n = sc.nextInt();
-        if(n > 200) {
-            print("Розмір масиву не може бути більше 200");
+        if(n > 300) {
+            print("Розмір масиву не може бути більше 300");
             return;
         }
 
-        double[] A = new double[2*n];
+        int[] A = new int[n];
 
-        for (int i = 0; i < 2*n; i++) {
-            A[i] = Math.random();
+        for (int i = 0; i < n; i++) {
+            A[i] = (int) Math.rint(Math.random()*10);
         }
 
-        for (int i = 0; i < 2*n; i++) {
-            print("A[" + i + "] = " + A[i]);
+        print("A = ");
+        for (int i = 0; i < n; i++) {
+            if(i < n-1) {
+                print(A[i] + ", ");
+            }
+            else {
+                print(A[i] + "");
+            }
         }
         print("\n\n");
 
-        double average = 0;
-        for (int i = 0; i < n; i++) {
-            average += A[i];
-        }
-        average = average / n;
+        A = removeDuplicates(A);
 
-        double sum = 0;
-
-        for (int i = n+1; i < 2*n; i++) {
-            if(A[i] < average)
-            {
-                sum += A[i];
+        for (int i = 0; i < A.length; i += 5) {
+            for (int j = 0; j < 5 && (i + j) < A.length; j++) {
+                print(A[i + j] + " ");
             }
+            print("\n");
         }
-
-        print("Сума елементів, які більші за середнє арифметичне перших " + n + " елементів: " + sum);
     }
 
     public static void task3() {
         print("\n\nTask 3\n\n");
-        print("Введіть розмірність матриці (nxn): ");
+
+        print("Введіть розмірність матриці (n <= 20): ");
         int n = sc.nextInt();
-        if(n > 20) {
-            print("Розмірність матриці не може бути більше 20");
-            return;
-        }
 
-        double[][] A = new double[n][n];
-        double[] B = new double[n];
+        int[][] M = new int[n][n];
+
+        int[] rowSums = new int[n];
+        int[] colSums = new int[n];
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                A[i][j] = Math.random();
+                M[i][j] = (int) Math.rint(Math.random()*10);
             }
         }
 
         for (int i = 0; i < n; i++) {
-            double average = 0;
             for (int j = 0; j < n; j++) {
-                average += A[i][j];
+                print(M[i][j] + " ");
             }
-            B[i] = average / n;
+            print("\n");
         }
 
-        print("\n\nВектор B побудований з середніх арифметичних рядків матриці А: \n\n B = [");
         for (int i = 0; i < n; i++) {
-            if (i < n-1)
-            {
-                print(B[i]+", ");
-            }
-            else
-            {
-                print(B[i]+"\n]");
+            for (int j = 0; j < n; j++) {
+                rowSums[i] += M[i][j];
+                colSums[i] += M[j][i];
             }
         }
 
+        boolean noSameSums = true;
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                if(rowSums[i] == colSums[j]) {
+                    print("рядок " + (i+1) + " та стовбець " + (j+1) + ": " + rowSums[i] + " = " + colSums[j] + "\n");
+                    noSameSums = false;
+                }
+            }
+        }
+
+        if(noSameSums) {
+            print("Не знайдено рядків і стовбців суми яких однакові");
+        }
     }
 
     public static void task4() {
         print("\n\nTask 4\n\n");
 
-        print("Введіть якийсь текст(повинні бути пробіли та розділові знаки): ");
+        print("Введіть текст(розділений пробілами та розділовими знаками): ");
+        sc.nextLine();
         String text = sc.nextLine();
 
-        String[] textToArray = text.split("\\W+");
+        String[] words = text.split("\\W+");
+        String[] words1 = Arrays.stream(words)
+                                .filter(s -> s.length() % 2 == 1)
+                                .toArray(String[]::new);
 
-        char first = textToArray[0].charAt(0);
-
-        for (int i = 0; i < textToArray.length; i++) {
-            textToArray[i] = textToArray[i].replace(first, ' ');
-            textToArray[i] = textToArray[i].replace(" ", "");
+        for(int i = 0; i < words1.length; i++) {
+            String part1 = words1[i].substring(0, (words1[i].length() / 2));
+            String part2 = words1[i].substring(((words1[i].length() / 2)) + 1);
+            words1[i] = part1 + part2;
         }
 
-        text = Arrays.toString(textToArray);
-        text = text.replace("[", "").replace("]", "").replace(",", "");
-        print("Відредагований текст де з усіх слів вилучено всі наступні входження першої літери тексту: \n" + text);
-
+        for (String s : words1) {
+            print(s + " ");
+        }
     }
 }
