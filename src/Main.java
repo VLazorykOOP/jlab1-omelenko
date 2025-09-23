@@ -156,17 +156,16 @@ public class Main {
         String text = sc.nextLine();
 
         String[] words = text.split("\\W+");
-        String[] words1 = Arrays.stream(words)
-                                .filter(s -> s.length() % 2 == 1)
-                                .toArray(String[]::new);
 
-        for(int i = 0; i < words1.length; i++) {
-            String part1 = words1[i].substring(0, (words1[i].length() / 2));
-            String part2 = words1[i].substring(((words1[i].length() / 2)) + 1);
-            words1[i] = part1 + part2;
+        for(int i = 0; i < words.length; i++) {
+            if(words[i].length() % 2 == 1) {
+                String part1 = words[i].substring(0, (words[i].length() / 2));
+                String part2 = words[i].substring(((words[i].length() / 2)) + 1);
+                words[i] = part1 + part2;
+            }
         }
 
-        for (String s : words1) {
+        for (String s : words) {
             print(s + " ");
         }
     }
